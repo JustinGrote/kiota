@@ -3,6 +3,7 @@ using Kiota.Builder.Writers.CSharp;
 using Kiota.Builder.Writers.Go;
 using Kiota.Builder.Writers.Java;
 using Kiota.Builder.Writers.Php;
+using Kiota.Builder.Writers.PowerShell;
 using Kiota.Builder.Writers.Python;
 using Kiota.Builder.Writers.Ruby;
 using Kiota.Builder.Writers.TypeScript;
@@ -31,5 +32,7 @@ public class LanguageWriterTests
         Assert.Equal(typeof(PhpWriter), LanguageWriter.GetLanguageWriter(GenerationLanguage.PHP, DefaultPath, DefaultName).GetType());
         Assert.Equal(typeof(PythonWriter),
                     LanguageWriter.GetLanguageWriter(GenerationLanguage.Python, DefaultPath, DefaultName).GetType());
+        Assert.Equal(typeof(PowerShellWriter),
+                    LanguageWriter.GetLanguageWriter(GenerationLanguage.PowerShell, DefaultPath, DefaultName).GetType());
     }
 }
