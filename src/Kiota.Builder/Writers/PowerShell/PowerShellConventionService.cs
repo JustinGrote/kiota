@@ -21,8 +21,8 @@ public sealed class PowerShellConventionService : CommonLanguageConventionServic
     public override string TranslateType(CodeType type)
     {
         ArgumentNullException.ThrowIfNull(type);
-        if (type.TypeDefinition is ITypeDefinition definition)
-            return definition.GetFullName();
+        if (type.TypeDefinition is CodeElement definition)
+            return definition.Name;
         return type.Name.ToLowerInvariant() switch
         {
             "integer" or "int32" => "int",
@@ -59,7 +59,10 @@ public sealed class PowerShellConventionService : CommonLanguageConventionServic
         ArgumentNullException.ThrowIfNull(writer);
         if (!element.Documentation.DescriptionAvailable)
             return false;
-        writer.WriteLine($"{DocCommentPrefix}{prefix}{element.Documentation.Description}{suffix}");
+        if (element is not CodeElement codeElement)
+            return false;
+        var description = element.Documentation.GetDescription(type => GetTypeString(type, codeElement));
+        writer.WriteLine($"{DocCommentPrefix}{prefix}{description}{suffix}");
         return true;
     }
 }

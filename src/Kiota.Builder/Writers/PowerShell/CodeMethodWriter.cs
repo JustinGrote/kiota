@@ -16,10 +16,10 @@ public sealed class CodeMethodWriter(PowerShellConventionService conventions) : 
             .Where(static x => !x.IsOfKind(CodeParameterKind.RequestAdapter, CodeParameterKind.PathParameters, CodeParameterKind.RawUrl))
             .Select(x => conventions.GetParameterSignature(x, codeElement))
             .ToArray();
-        writer.WriteLine("[CmdletBinding(SupportsShouldProcess)]");
-        writer.WriteLine($"param({string.Join(", ", parameters)})");
         writer.WriteLine($"function {codeElement.Name.ToFirstCharacterUpperCase()}");
         writer.StartBlock();
+        writer.WriteLine("[CmdletBinding(SupportsShouldProcess)]");
+        writer.WriteLine($"param({string.Join(", ", parameters)})");
         writer.WriteLine("if ($PSCmdlet.ShouldProcess($PSCmdlet.MyInvocation.Line)) {");
         writer.IncreaseIndent();
         writer.WriteLine("$PSCmdlet.WriteObject($null)");
