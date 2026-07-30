@@ -12,7 +12,7 @@ public class PowerShellWriterTests
     {
         var writer = new PowerShellWriter("./", "ApiSdk");
         Assert.NotNull(writer);
-        Assert.Equal(".ps1", ((PowerShellPathSegmenter)writer.PathSegmenter!).FileSuffix);
+        Assert.Equal(".cs", ((PowerShellPathSegmenter)writer.PathSegmenter!).FileSuffix);
         Assert.Throws<ArgumentException>(() => new PowerShellWriter(string.Empty, "ApiSdk"));
         Assert.Throws<ArgumentException>(() => new PowerShellWriter("./", string.Empty));
     }

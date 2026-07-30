@@ -50,7 +50,7 @@ public sealed class PowerShellConventionService : CommonLanguageConventionServic
     public override string GetParameterSignature(CodeParameter parameter, CodeElement targetElement, LanguageWriter? writer = null)
     {
         ArgumentNullException.ThrowIfNull(parameter);
-        return $"[Parameter(Mandatory = {!parameter.Optional})][{GetTypeString(parameter.Type, targetElement)}]${parameter.Name.ToFirstCharacterUpperCase()}";
+        return $"[System.Management.Automation.Parameter(Mandatory = {!parameter.Optional})] public {GetTypeString(parameter.Type, targetElement)} {parameter.Name.ToFirstCharacterUpperCase()} {{ get; set; }}";
     }
 
     public override bool WriteShortDescription(IDocumentedElement element, LanguageWriter writer, string prefix = "", string suffix = "")

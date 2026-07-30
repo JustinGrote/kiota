@@ -16,14 +16,18 @@ public sealed class CodeMethodWriter(PowerShellConventionService conventions) : 
             .Where(static x => !x.IsOfKind(CodeParameterKind.RequestAdapter, CodeParameterKind.PathParameters, CodeParameterKind.RawUrl))
             .Select(x => conventions.GetParameterSignature(x, codeElement))
             .ToArray();
-        writer.WriteLine($"function {codeElement.Name.ToFirstCharacterUpperCase()}");
+        var commandName = codeElement.Name.ToFirstCharacterUpperCase();
+        writer.WriteLine($"[System.Management.Automation.Cmdlet(\"Invoke\", \"{commandName}\")]");
+        writer.WriteLine($"public sealed class {commandName}Command : System.Management.Automation.PSCmdlet");
         writer.StartBlock();
-        writer.WriteLine("[CmdletBinding(SupportsShouldProcess)]");
-        writer.WriteLine($"param({string.Join(", ", parameters)})");
-        writer.WriteLine("if ($PSCmdlet.ShouldProcess($PSCmdlet.MyInvocation.Line)) {");
+        foreach (var parameter in parameters)
+            writer.WriteLine(parameter);
+        writer.WriteLine("protected override void ProcessRecord()");
+        writer.StartBlock();
         writer.IncreaseIndent();
-        writer.WriteLine("$PSCmdlet.WriteObject($null)");
+        writer.WriteLine("WriteObject(null);");
         writer.DecreaseIndent();
+        writer.CloseBlock();
         writer.CloseBlock();
     }
 }
